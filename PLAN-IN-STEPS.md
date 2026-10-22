@@ -79,22 +79,28 @@ flowchart TD
 ### Fase 3: Exemplo Canônico de Referência (Golden Example)
 > **Objetivo:** Construir um projeto exemplo completo (`examples/opinion-dynamics/`) para provar o conceito e servir de espelho para a IA ao criar novos modelos.
 
-- [ ] **3.1. Documentação do Exemplo:**
-  - `examples/opinion-dynamics/README.md`: Explicação do modelo de dinâmica de opiniões (Bounded Confidence / Deffuant-Weisbuch).
-  - `examples/opinion-dynamics/specification.md`: O formulário de entrevista preenchido.
-  - `examples/opinion-dynamics/odd.md`: Protocolo ODD completo e rigoroso deste modelo.
-  - `examples/opinion-dynamics/decision-log.md`: As decisões teóricas registradas.
-- [ ] **3.2. Implementação em Python (Mesa):**
-  - `examples/opinion-dynamics/agents.py`: Implementação dos agentes de opinião com anotações de regras ODD.
-  - `examples/opinion-dynamics/model.py`: Modelo com espaço (rede ou grade/contínuo), agendamento e DataCollector.
-  - `examples/opinion-dynamics/experiments.py`: Execução de cenários (ex: polarização vs consenso) e controle de seeds.
-  - `examples/opinion-dynamics/metrics.py`: Análise e visualização da convergência de opiniões.
-  - `examples/opinion-dynamics/requirements.txt`: Dependências mínimas (`mesa`, `numpy`, `matplotlib`, `pytest`).
-- [ ] **3.3. Testes de Invariantes e Sanidade:**
-  - `examples/opinion-dynamics/tests/test_model.py` (checks V1–V8 de `references/stage-4-verify.md`):
-    - Garantir que a opinião sempre permanece no intervalo $[0, 1]$.
-    - Garantir que a conservação de agentes é respeitada.
-    - Garantir que a mesma seed gera exatamente os mesmos resultados (reprodutibilidade estrita).
+- [x] **3.1. Documentação do Exemplo:**
+  - `examples/opinion-dynamics/README.md`: Explicação do modelo e instruções de execução.
+  - `examples/opinion-dynamics/specification.md`: O formulário de entrevista preenchido da Fase 1 (Elicit).
+  - `examples/opinion-dynamics/odd.md`: Protocolo ODD completo e rigoroso deste modelo (seções 1 a 7 e Anexo).
+  - `examples/opinion-dynamics/decision-log.md`: As decisões teóricas registradas (#1 a #5).
+- [x] **3.2. Implementação em Python (Mesa 3.x):**
+  - `examples/opinion-dynamics/requirements.txt`: Dependências (`mesa>=3.0.0`, `numpy`, `matplotlib`, `pytest`, `pyyaml`).
+  - `examples/opinion-dynamics/experiment-config.yaml`: Parâmetros de baseline, controles e cenários teóricos (consenso, bipolarização, fragmentação).
+  - `examples/opinion-dynamics/agents.py`: Implementação do `OpinionAgent` com anotações ODD (ODD 2, ODD 3, ODD 7.1).
+  - `examples/opinion-dynamics/model.py`: Implementação do `OpinionModel` com `super().__init__(seed=seed)`, `shuffle_do("step")` e `DataCollector`.
+  - `examples/opinion-dynamics/experiments.py`: Execução de cenários, exportação de CSV e geração de plots.
+  - `examples/opinion-dynamics/metrics.py`: Análise e visualização da convergência de opiniões e detecção de clusters.
+- [x] **3.3. Testes de Invariantes e Sanidade:**
+  - `examples/opinion-dynamics/tests/test_model.py` (checks V1 a V8 completos conforme `references/stage-4-verify.md`):
+    - V1: Execução sem erros.
+    - V2: Determinismo estrito de sementes (bit-for-bit com assert_frame_equal).
+    - V3: Sensibilidade a sementes distintas.
+    - V4: Invariante do intervalo [0.0, 1.0].
+    - V5: Conservação populacional estrita.
+    - V6: Fiação e sensibilidade de parâmetros (transição entre consenso e fragmentação).
+    - V7: Coleta de métricas do DataCollector e integridade de linhas.
+    - V8: Casos de borda (população unitária e limites numéricos inválidos).
 
 ---
 
