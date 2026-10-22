@@ -1,0 +1,74 @@
+# Experiment Configuration for Agent-Based Simulation
+# Conforms to Stage 3 & 4 (Simulate & Verify) execution protocols.
+
+metadata:
+  model_name: "ModelName"
+  version: "0.1.0"
+  description: "Configuration description for simulation runs and parameter sweeps."
+
+# 1. Baseline Model Parameters
+# Defines default baseline values, allowed bounds, and descriptions.
+# Every parameter here must match an attribute in Model.__init__ and ODD Annex A.1 (Parameter Table).
+model_parameters:
+  population_size:
+    default: 100
+    range: [10, 1000]
+    type: int
+    description: "Total number of interacting agents."
+  
+  epsilon:
+    default: 0.2
+    range: [0.01, 1.0]
+    type: float
+    description: "Confidence bound threshold. Agents interact only if |x_i - x_j| < epsilon."
+  
+  mu:
+    default: 0.5
+    range: [0.01, 0.5]
+    type: float
+    description: "Convergence rate parameter determining opinion shift per interaction."
+
+# 2. Run Controls (Single Run & Baseline Execution)
+run_controls:
+  max_steps: 1000
+  stop_condition: "consensus_or_max_steps"  # Options: max_steps, no_changes, consensus_or_max_steps
+  seeds: [42, 123, 999]                     # List of reproducible seeds for baseline replication
+  data_collection:
+    export_format: "csv"                    # Options: csv, parquet
+    output_dir: "output/raw"
+    frequency: 1                            # Collect every N steps
+
+# 3. Named Theoretical Scenarios
+# Predefined parameter sets representing distinct theoretical hypotheses or experimental interventions.
+scenarios:
+  baseline_moderate:
+    description: "Moderate tolerance leading to multiple polarized opinion clusters."
+    parameters:
+      epsilon: 0.2
+      mu: 0.5
+
+  high_tolerance_consensus:
+    description: "High tolerance leading to a single global consensus."
+    parameters:
+      epsilon: 0.5
+      mu: 0.5
+
+  low_tolerance_fragmentation:
+    description: "Narrow tolerance leading to deep opinion fragmentation and echo chambers."
+    parameters:
+      epsilon: 0.08
+      mu: 0.3
+
+# 4. Parameter Sweeps (Batch Runs)
+# Grid definition for multi-parameter sensitivity analysis and batch execution.
+parameter_sweep:
+  enabled: false
+  iterations_per_config: 10                 # Number of random seeds per combination
+  seed_generator: "incremental"             # Options: explicit_list, incremental
+  base_seed: 1000
+  grid:
+    epsilon: [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5]
+    population_size: [50, 100, 200]
+  fixed_parameters:
+    mu: 0.5
+    max_steps: 2000
