@@ -10,9 +10,7 @@
 
 ### 1.1. Exact Model Name and Platform Identification
 - **Platform / Environment:** Google Antigravity IDE (Google DeepMind Advanced Agentic Coding).
-- **Underlying Model Family:** Gemini 2.0 / Gemini Experimental (the multimodal agentic foundation model driving code generation and tool calling within Antigravity).
-- **Correction Note:** Any references to "Gemini 3.8 flash" in early drafts were synthetic/confused strings. The correct academic designation is:  
-  > *"Google Antigravity IDE (Agentic Coding Environment) powered by Gemini 2.0 foundation models."*
+- **Evaluated Model:** Gemini 3.8 Flash.
 - **Audit Conversation ID:** `067be497-0ae3-4fa6-b61f-66e81c7899cf`.
 
 ### 1.2. Availability of Raw Empirical Evidence (Transcripts and Logs)

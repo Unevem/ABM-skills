@@ -2,6 +2,8 @@
 
 **Project:** ABMforAI (Computational Modeling Assistant for Domain Researchers)  
 **Date:** 2026-10-22  
+**Evaluated Model / Environment:** Gemini 3.8 Flash (Google Antigravity IDE)  
+**Audit Conversation ID:** `067be497-0ae3-4fa6-b61f-66e81c7899cf`  
 **Subject:** Methodological Post-Mortem and Empirical Findings on AI-Assisted Scientific Simulation Modeling  
 **Target Publication Scope:** Methodological section and discussion for an academic paper on AI-assisted Agent-Based Modeling (ABM).
 
