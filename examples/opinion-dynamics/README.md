@@ -38,12 +38,14 @@ opinion-dynamics/
 ├── specification.md        # Stage 1: Conceptual interview record
 ├── odd.md                  # Stage 2: Formal ODD protocol (Grimm et al. 2020)
 ├── decision-log.md         # Stage 2: Log of theoretical decisions and assumptions
-├── experiment-config.yaml  # Parameter definitions and scenario sweeps
-├── requirements.txt        # Pinned dependencies (mesa, numpy, matplotlib, pytest)
+├── TASKS.md                # Task tracking and evidence-gated completion landmarks
+├── experiment-config.yaml  # Parameter definitions, named scenarios, and parameter sweeps
+├── requirements.txt        # Pinned dependencies (mesa 3.5, numpy, matplotlib, pytest)
 ├── agents.py               # OpinionAgent class with ODD annotations
 ├── model.py                # OpinionModel class with DataCollector and Mesa 3 AgentSet
-├── experiments.py          # Runner for baseline, scenarios, and sweeps
+├── experiments.py          # Runner for multi-seed baseline, scenarios, and sweeps
 ├── metrics.py              # Cluster detection, variance calculation, and plots
+├── verification-report.md  # Stage 4: Comprehensive model verification report
 └── tests/
     ├── __init__.py
     └── test_model.py       # Mandatory verification checks (V1 to V8)

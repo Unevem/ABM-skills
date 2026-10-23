@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this framework, skills, or methodology in your research, please cite it as below."
+title: "ABMforAI: Rigorous, Evidence-Based Agent-Based Modeling Guidelines and Skills for AI Assistants"
+authors:
+  - name: "ABMforAI Contributors"
+version: 1.0.0
+date-released: 2026-10-22
+license: MIT
+repository-code: "https://github.com/Unevem/ABM-skills"
+url: "https://github.com/Unevem/ABM-skills"
+keywords:
+  - "agent-based-modeling"
+  - "computational-social-science"
+  - "artificial-intelligence"
+  - "odd-protocol"
+  - "mesa-framework"
+  - "reproducibility"
+  - "simulation"
+  - "evidence-gated"
+abstract: >-
+  ABMforAI is an open-source framework, agent skill suite, and methodological guideline
+  designed to empower domain researchers to design, document (ODD Protocol),
+  implement (Python/Mesa 3.5+), and verify computational simulations with AI assistants
+  while eliminating theoretical hallucinations and undocumented behavioral assumptions.

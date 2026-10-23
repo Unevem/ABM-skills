@@ -21,6 +21,8 @@ The AI **must pause** and explicitly request human review before proceeding in t
    - Periodic (toroidal), absorbing, reflective, or infinite boundaries.
 5. **Emergent Invariant Definition:**
    - Determining what constitutes a valid state vs. an invalid state (e.g., can agent wealth/opinion fall below zero or exceed one?).
+6. **Task Completion and Stage Transitions:**
+   - Moving any task to `Completed` or concluding any workflow stage. The AI must first prove to the user that it succeeded (providing concrete execution evidence), present a structured review gate (or invite `/grill-me`), and await explicit approval.
 
 ## Protocol for Requesting Review
 When one of the trigger conditions is met:

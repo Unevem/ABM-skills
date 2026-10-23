@@ -150,8 +150,14 @@ Rules:
 
 1. Read it at the start of every session.
 2. Move a task to `In Progress` before working on it.
-3. Move it to `Completed` only after its output exists and has been checked.
-   Cite the evidence.
+3. **Evidence-Gated Completion (Grill-Me Protocol):** The agent is **strictly
+   forbidden** from unilaterally moving tasks to `Completed`. A task moves to
+   `Completed` only after:
+   a) the agent demonstrates concrete empirical proof of success (real test
+      outputs, generated artifacts, metric summaries);
+   b) the agent presents the checkpoint to the researcher and triggers an
+      interactive review gate (such as `/grill-me` or structured verification);
+   c) the researcher explicitly approves the task.
 4. Each item in `Decisions Needed` lists the tasks it blocks.
 5. Never delete tasks silently. Abandoned tasks move to `Completed` with the
    reason.
@@ -160,7 +166,11 @@ Rules:
 
 ## 7. Reproducibility
 
-- The model takes a `seed` and passes it to `super().__init__(seed=seed)`.
+- The model takes a `seed` argument and passes it to the Mesa base class.
+  The keyword depends on the installed version: recent Mesa 3.x releases
+  use `super().__init__(rng=seed)` and deprecate `seed=`. Check the
+  installed version, run the tests with warnings visible, and pin the tested
+  range in `requirements.txt` (e.g. `mesa>=3.5,<4`).
 - All randomness uses the model's generators (`self.random` or `self.rng`).
   Never use the global `random` or `np.random` modules.
 - Every parameter is an argument of the model's `__init__` and appears in
@@ -177,3 +187,65 @@ Rules:
 - Do not modify files unrelated to the current task.
 - After each task, tell the researcher which files were created or changed
   and why.
+
+---
+
+## 9. Checkpoints (Never Do Everything at Once)
+
+Work advances in small, reviewable increments separated by **checkpoints**.
+A checkpoint is a landmark where the agent stops, explains what it did, and
+waits for the researcher. Producing several stages, or several artifacts
+that depend on each other, in a single turn is forbidden: errors made early
+propagate silently into everything built on top of them.
+
+### When a checkpoint is mandatory
+
+1. After every question-and-answer round that produces a decision-log entry.
+2. After each Stage 1-4 output document (`model-specification.md`, `odd.md`,
+   `decision-log.md`, `verification-report.md`).
+3. After each atomic implementation task (one file or one submodel).
+4. After the test suite runs and after the experiments run.
+5. Whenever the agent changes something the researcher did not ask for
+   (dependency added, API adapted, file touched outside the task).
+
+### Checkpoint report (in the researcher's language)
+
+```text
+CHECKPOINT <n> - <stage> - <task>
+Done:        what was produced or changed (files, with links)
+Decided by researcher:  decision-log entries created in this step (#IDs)
+Decided by agent:       technical choices made in this step, and why
+Not done / deviations:  anything skipped, simplified, or different from the
+                        ODD, the config, or the plan
+Evidence:    command run and its real output (tests, runs), or "none yet"
+Next:        the single next atomic task
+Waiting for: explicit approval to continue
+```
+
+Rules:
+
+- Stop after the report. Do not start the next task in the same turn.
+- The agent is **strictly forbidden from self-marking tasks as completed**.
+- The "Decided by researcher" line may only list decisions the researcher
+  actually answered in this conversation. If the list would be empty, say so.
+- After the agent proves success and the researcher explicitly approves
+  (via review, discussion, or `/grill-me`), add a landmark to the task in
+  `TASKS.md` under `## Completed`:
+  `(evidence: <files/command>; approved by researcher <date>)`.
+
+---
+
+## 10. Known Failure Modes
+
+These errors happened in practice. Check for them before every checkpoint.
+
+| Failure | What it looks like | Prevention |
+|---|---|---|
+| **Fabricated consensus** | The decision log lists decisions as `researcher` / `confirmed` that were never asked, or rationales put words in the researcher's mouth | Write a decision-log entry only right after the researcher answers. Record the exact choice. If the researcher took the recommendation, write "Researcher accepted agent recommendation" |
+| **Batch execution** | Specification, ODD, decision log, code, and tests appear in one turn; the researcher sees them only at the end | Section 9: one artifact per checkpoint |
+| **Phantom completion** | A task or plan item is marked done while its file does not exist | Mark done only with evidence that you just checked |
+| **Autonomous completion** | The agent marks a task `[x] Completed` on its own without proving success or without an interactive review gate (`/grill-me`) | Strictly forbidden: prove success with real execution output, invite human review, and wait for explicit approval |
+| **Config drift** | The config declares seeds, sweeps, or scenarios that the code silently ignores (e.g. only the first seed runs) | Correspondence check: every config key is either used or reported as a deviation |
+| **Range drift** | Parameter ranges differ between the ODD table, the config, the code validation, and the tests | Compare all four in the correspondence check |
+| **Narrative over evidence** | A scenario description promises an outcome ("two clusters") and the run shows something else, but the report repeats the description | Report observed results neutrally. When simulation results reveal empirical nuances (e.g. minor fringe clusters) that require updating stylized facts, apply the **Empirical Revision Tracking Pattern**: update the text, but explicitly embed an in-place `revision_note` (citing the data and decision-log #ID) rather than silently rewriting history |
+| **Silent environment fixes** | A missing dependency or a deprecated API is patched without telling the researcher | Report it under "Decided by agent" and log it as a technical decision |

@@ -129,18 +129,21 @@ def test_v8_edge_cases() -> None:
     single_agent_model.step()
     assert single_agent_model.agents.to_list()[0].opinion == initial_op
 
-    # 2. Invalid parameter values raise ValueError
+    # 2. Invalid parameter values raise ValueError (aligned with ODD Table A.1)
     with pytest.raises(ValueError):
         OpinionModel(population_size=0)
 
     with pytest.raises(ValueError):
-        OpinionModel(epsilon=-0.1)
+        OpinionModel(population_size=10001)
+
+    with pytest.raises(ValueError):
+        OpinionModel(epsilon=0.005)
 
     with pytest.raises(ValueError):
         OpinionModel(epsilon=1.5)
 
     with pytest.raises(ValueError):
-        OpinionModel(mu=0.0)
+        OpinionModel(mu=0.005)
 
     with pytest.raises(ValueError):
         OpinionModel(mu=0.9)  # mu cannot exceed 0.5 in Deffuant formulation

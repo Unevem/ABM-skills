@@ -57,6 +57,13 @@ report:
    parameter table are identical.
 5. No `[DECISION NEEDED]` appears anywhere in the code.
 6. Every `[ASSUMPTION]` in the code has a decision-log entry.
+7. Every key in `experiment-config.yaml` (seeds, scenarios, sweeps) is
+   actually consumed by `experiments.py`. Unused keys are reported as
+   deviations, not silently ignored.
+8. Parameter **ranges** agree across the ODD table, the config, the
+   validation in `Model.__init__`, and the edge-case tests.
+9. Every decision-log entry marked `researcher` corresponds to a question
+   the researcher actually answered.
 
 Useful searches:
 
@@ -78,6 +85,12 @@ grep -rn "ODD " agents.py model.py
 3. Produce the plots and tables for the metrics in the ODD output table.
 4. Report the results neutrally: what was observed and how much it varied
    across seeds. Leave the interpretation to the researcher.
+5. If an observed result differs from the expected outcome written in the
+   config, specification, or ODD (e.g. "two clusters" expected, three
+   observed), quote both and raise it as a question. Never repeat the
+   expected description as if it were the result.
+6. Tests and experiments are separate checkpoints. Report the test run,
+   wait, then run the experiments.
 
 ---
 

@@ -42,34 +42,37 @@ class OpinionModel(mesa.Model):
 
     def __init__(
         self,
-        population_size: int = 100,
+        population_size: int = 1000,
         epsilon: float = 0.2,
         mu: float = 0.5,
         seed: int | None = None,
+        collect_agent_vars: bool = True,
     ) -> None:
         """Initialize the simulation model.
         
         Args:
-            population_size: Number of agents (ODD Annex A.1: population_size, default=100).
+            population_size: Number of agents (ODD Annex A.1: population_size, default=1000).
             epsilon: Confidence bound threshold (ODD Annex A.1: epsilon, default=0.2).
             mu: Convergence rate (ODD Annex A.1: mu, default=0.5).
             seed: Explicit seed for random number generation (Reproducibility rule).
+            collect_agent_vars: Whether to collect micro agent-level vars at every step (default=True).
         """
         # Seeds self.random and self.rng in Mesa 3.x
-        super().__init__(seed=seed)
+        super().__init__(rng=seed)
 
-        # Validate domain boundaries for parameters
-        if population_size < 1:
-            raise ValueError("population_size must be at least 1")
-        if not (0.0 < epsilon <= 1.0):
-            raise ValueError("epsilon must be in (0.0, 1.0]")
-        if not (0.0 < mu <= 0.5):
-            raise ValueError("mu must be in (0.0, 0.5]")
+        # Validate domain boundaries for parameters (ODD Annex A.1)
+        if not (1 <= population_size <= 10000):
+            raise ValueError("population_size must be in [1, 10000]")
+        if not (0.01 <= epsilon <= 1.0):
+            raise ValueError("epsilon must be in [0.01, 1.0]")
+        if not (0.01 <= mu <= 0.5):
+            raise ValueError("mu must be in [0.01, 0.5]")
 
         # ODD: Annex A.1 - Parameters
         self.population_size: int = population_size
         self.epsilon: float = float(epsilon)
         self.mu: float = float(mu)
+        self.collect_agent_vars: bool = collect_agent_vars
 
         # ODD: Section 5 - Initialization
         # Instantiate N agents with initial opinions drawn uniformly from [0.0, 1.0]
@@ -79,14 +82,13 @@ class OpinionModel(mesa.Model):
             OpinionAgent(self, opinion=initial_opinion)
 
         # ODD: Section 4.11 & Annex A.2 - Data Collection
+        agent_reporters = {"opinion": lambda a: a.opinion} if self.collect_agent_vars else {}
         self.datacollector = mesa.DataCollector(
             model_reporters={
                 "mean_opinion": compute_mean_opinion,
                 "opinion_variance": compute_opinion_variance,
             },
-            agent_reporters={
-                "opinion": lambda a: a.opinion,
-            },
+            agent_reporters=agent_reporters,
         )
 
         # Collect initial step 0 state

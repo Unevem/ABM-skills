@@ -1,0 +1,42 @@
+{
+  "name": "abmforai",
+  "version": "1.0.0",
+  "description": "Installer and setup CLI for ABMforAI guidelines, skills, and tools for AI coding assistants",
+  "main": "bin/cli.js",
+  "bin": {
+    "abmforai": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    ".agents/",
+    "tools/*.py",
+    "AGENTS.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "setup": "node ./bin/cli.js setup",
+    "doctor": "node ./bin/cli.js doctor",
+    "test": "node ./bin/cli.js doctor"
+  },
+  "keywords": [
+    "agent-based-modeling",
+    "abm",
+    "ai-agents",
+    "cursor",
+    "claude-code",
+    "antigravity",
+    "copilot",
+    "odd-protocol",
+    "mesa"
+  ],
+  "author": "ABMforAI Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Unevem/ABM-skills.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

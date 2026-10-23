@@ -60,10 +60,8 @@ class OpinionAgent(mesa.Agent):
         # ODD: Section 7.1 - Rule: interact if and only if |x_i - x_j| < epsilon
         if distance < self.model.epsilon:
             # ODD: Section 7.1 - Symmetric convergence with rate mu
+            # Notice: x_i(t+1) = (1 - mu)*x_i + mu*x_j is a convex combination for mu in (0, 0.5],
+            # ensuring x_i strictly remains in [0.0, 1.0] without artificial clipping.
             diff = partner.opinion - self.opinion
             self.opinion += self.model.mu * diff
             partner.opinion -= self.model.mu * diff
-
-            # ODD: Section 7.1 - Invariant preservation on [0.0, 1.0]
-            self.opinion = max(0.0, min(1.0, self.opinion))
-            partner.opinion = max(0.0, min(1.0, partner.opinion))

@@ -9,33 +9,33 @@ This document records the output of the Stage 1 Elicit diagnostic interview for 
 ### Dimension A: Purpose and Research Question
 - **Real-world phenomenon:** The emergence of social consensus, polarization, and echo-chamber fragmentation in continuous opinion spaces through peer-to-peer communication.
 - **Core research question:** Under what confidence bound threshold $\epsilon$ does an initially uniform distribution of opinions transition from pluralistic fragmentation to bipolarization or global consensus?
-- **Intended use:** Theoretical model building and replication of classical bounded confidence dynamics.
+- **Intended use:** Theoretical model building and replication of classical bounded confidence dynamics (Deffuant et al., 2000).
 - **Stylized facts to reproduce:**
-  - Plurality of clusters for small $\epsilon$ ($\epsilon \le 0.1$).
-  - Bipolarized stable clusters for intermediate $\epsilon$ ($\approx 0.2$).
+  - Plurality of clusters for narrow tolerance ($\epsilon \le 0.1$).
+  - Bipolarized stable clusters for intermediate tolerance ($\epsilon \approx 0.2$), with two dominant factions and occasional minor fringe groups (empirically confirmed across seeds; decision-log #12).
   - Complete central consensus for wide tolerance ($\epsilon \ge 0.3$).
 
 ### Dimension B: Entities and Actors
 - **Active agents:** Individuals holding a continuous subjective opinion.
 - **Agent types:** Single homogeneous agent class (`OpinionAgent`).
 - **Non-agent entities:** None (pure social agent interaction).
-- **Heterogeneity:** Homogeneous in behavioral rules ($\epsilon, \mu$), heterogeneous in initial opinions drawn uniformly from $[0, 1]$.
+- **Heterogeneity:** Homogeneous in behavioral parameters ($\epsilon, \mu$), heterogeneous in initial opinions drawn uniformly from $[0, 1]$.
 
 ### Dimension C: State Variables
 - **Individual agent traits:**
   - `opinion` (float, range: $[0.0, 1.0]$, dynamic): The continuous belief/attitude.
-  - `id` (int, range: $[0, N-1]$, static): Unique identifier.
+  - `id` (int, range: $[0, N-1]$, static): Unique identifier auto-assigned by Mesa.
 - **Environment state:** None.
 
 ### Dimension D: Space and Topology
 - **Does space matter?** No.
 - **Spatial structure:** Non-spatial, well-mixed global interaction pool.
-- **Boundary conditions:** Not applicable (opinion boundaries bounded on $[0, 1]$).
+- **Boundary conditions:** Not applicable.
 - **Interaction radius:** Global pool; any agent can potentially interact with any other agent.
 
 ### Dimension E: Time and Scales
 - **Time step meaning (dt):** 1 tick = 1 Monte Carlo sweep ($N$ random bilateral interaction attempts).
-- **Simulation horizon:** Fixed duration of $T = 1000$ steps or stabilization where no further shifts occur.
+- **Simulation horizon:** Fixed duration of $T = 500$ steps (sufficient for asymptotic cluster convergence per Deffuant et al., 2000).
 - **Spatial resolution:** Not applicable.
 
 ### Dimension F: Decision Making and Behaviors
@@ -57,13 +57,13 @@ This document records the output of the Stage 1 Elicit diagnostic interview for 
 
 ### Dimension I: Stochasticity
 - **Where is randomness used?**
-  1. Initialization: Initial opinions $x_i \sim \text{Uniform}(0, 1)$.
+  1. Initialization: Initial opinions $x_i(0) \sim \text{Uniform}(0, 1)$.
   2. Interaction: Random selection of interaction partner $j \ne i$.
   3. Activation order: Shuffled execution order in each tick.
 - **Distributions:** Uniform pseudorandom distribution seeded explicitly.
 
 ### Dimension J: Initialization
-- **Initial population size:** $N = 100$ agents (default baseline).
+- **Initial population size:** $N = 1000$ agents (canonical baseline from Deffuant et al., 2000).
 - **Initial spatial placement:** Not applicable.
 - **Initial states:** Each agent's opinion is drawn independently from $\text{Uniform}(0.0, 1.0)$.
 
@@ -76,7 +76,7 @@ This document records the output of the Stage 1 Elicit diagnostic interview for 
 - **Macro-level metrics:**
   - Mean opinion $\bar{x}(t)$.
   - Opinion variance $\sigma^2(t)$.
-  - Final cluster count (number of groups where pairwise distances within cluster $< \epsilon$).
+  - Final cluster count (number of groups where consecutive sorted opinions differ by $\ge \epsilon$).
 - **Reporting frequency:** Every step $t$.
 
 ---
@@ -100,9 +100,8 @@ This document records the output of the Stage 1 Elicit diagnostic interview for 
 
 ---
 
-## 3. Researcher Confirmation Sign-Off
+## 3. Review Status
 
-- **Specification Status:** Approved for Stage 2 Formalization
+- **Specification Status:** Aligned with researcher decisions #1 through #8.
 - **Date of Review:** 2026-10-22
 - **Open Gaps:** None.
-- **Confirmed by Researcher:** Yes

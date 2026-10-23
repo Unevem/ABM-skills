@@ -44,10 +44,19 @@ rules apply too; where they conflict, the stricter rule wins.
    structured multiple-choice question. Independent work may continue.
 3. **Trace everything.** Every agent behavior, state variable, schedule step,
    and parameter in code must cite the ODD section that defines it.
-4. **Researcher sign-off.** No stage is complete until the researcher has
-   explicitly reviewed and approved its output.
+4. **Researcher sign-off & grill-me gate.** The agent is strictly forbidden from
+   unilaterally marking tasks as completed. No stage or task is complete until
+   the agent proves success with verifiable evidence and the researcher
+   explicitly approves it after an interactive review gate (e.g. `/grill-me`).
 5. **Reproducibility.** Every source of randomness flows from a single explicit
    seed. Every parameter can be configured. No magic numbers.
+6. **Checkpoints, never batches.** Never produce several stages or dependent
+   artifacts in one turn. After each artifact, decision round, or test/run,
+   stop and give a checkpoint report (what was done, who decided what,
+   deviations, real evidence, next step), then wait for approval. See
+   [guardrails.md](references/guardrails.md) sections 9 and 10, which also
+   list failure modes observed in practice (fabricated decision-log
+   consensus, autonomous completion, phantom tasks, config drift).
 
 ---
 
@@ -68,7 +77,9 @@ never specified), go back to the stage that owns that decision. Do not patch
 the gap locally.
 
 Work on one stage at a time. Load only the reference file for the current
-stage.
+stage. Inside a stage, work one artifact at a time and end each one with a
+checkpoint. A stage is never closed in the same turn in which its outputs
+were produced: the researcher must see them first.
 
 ### Stage 1: Elicit (diagnostic interview)
 

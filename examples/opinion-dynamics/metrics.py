@@ -2,18 +2,19 @@
 
 Conforms to ODD Protocol:
 - Observation: ODD Section 4.11
+- Submodel: ODD Section 7.2 (Cluster Identification)
 - Outputs: ODD Annex A.2
 """
 
 from typing import Sequence
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 
 def identify_clusters(opinions: Sequence[float], epsilon: float) -> list[list[float]]:
-    """Group continuous opinions into discrete clusters based on tolerance epsilon.
+    """Group continuous opinions into discrete clusters using 1D single-linkage gap clustering.
     
+    ODD: Section 7.2 - Cluster Identification
     Agents in the same cluster have distance between consecutive sorted values < epsilon.
     
     Args:
@@ -30,7 +31,8 @@ def identify_clusters(opinions: Sequence[float], epsilon: float) -> list[list[fl
     clusters: list[list[float]] = [[sorted_opinions[0]]]
 
     for x in sorted_opinions[1:]:
-        if abs(x - clusters[-1][-1]) < epsilon:
+        # ODD: Section 7.2 - Cluster boundary placed when gap >= epsilon
+        if (x - clusters[-1][-1]) < epsilon:
             clusters[-1].append(x)
         else:
             clusters.append([x])
@@ -39,7 +41,10 @@ def identify_clusters(opinions: Sequence[float], epsilon: float) -> list[list[fl
 
 
 def count_clusters(opinions: Sequence[float], epsilon: float) -> int:
-    """Return the total number of distinct opinion clusters."""
+    """Return the total number of distinct opinion clusters.
+    
+    ODD: Annex A.2 - Output Table (cluster_count)
+    """
     return len(identify_clusters(opinions, epsilon))
 
 
@@ -62,7 +67,7 @@ def plot_opinion_trajectories(
     unstacked = agent_df["opinion"].unstack(level="AgentID")
     
     for agent_id in unstacked.columns:
-        plt.plot(unstacked.index, unstacked[agent_id], alpha=0.5, linewidth=1.0)
+        plt.plot(unstacked.index, unstacked[agent_id], alpha=0.3, linewidth=0.8)
 
     plt.title(title, fontsize=12)
     plt.xlabel("Simulation Step (Monte Carlo Sweeps)", fontsize=10)
@@ -81,7 +86,7 @@ def plot_opinion_trajectories(
 def plot_final_distribution(
     opinions: Sequence[float],
     title: str = "Final Opinion Distribution",
-    bins: int = 30,
+    bins: int = 40,
     save_path: str | None = None,
 ) -> None:
     """Plot a histogram of opinions at the end of the simulation.

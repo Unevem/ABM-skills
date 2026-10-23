@@ -73,7 +73,7 @@ class OpinionModel(mesa.Model):
 
     def __init__(self, n_agents: int = 100, epsilon: float = 0.2,
                  mu: float = 0.5, seed: int | None = None) -> None:
-        super().__init__(seed=seed)      # seeds self.random and self.rng
+        super().__init__(rng=seed)       # seeds self.random and self.rng (older 3.x: seed=seed)
         self.epsilon = epsilon           # ODD 7.1, parameter epsilon
         self.mu = mu                     # ODD 7.1, parameter mu
 
@@ -112,7 +112,9 @@ them from the ODD.
   counter.
 - **Randomness:** use only `self.random` (Python `Random`) or `self.rng`
   (NumPy `Generator`) on the model (`self.model.random` from an agent).
-  Both are seeded by `super().__init__(seed=seed)`.
+  Both are seeded by the base-class constructor (`rng=` in recent 3.x,
+  `seed=` in older 3.x; a `FutureWarning` in the test output means the
+  keyword is deprecated for the installed version).
 - **Indexing:** `model.agents` is a set. Use `.to_list()` when you need
   indexing, and remember that iteration order can depend on insertion
   order.
@@ -127,8 +129,12 @@ them from the ODD.
 
 ## Coding Rules
 
-1. **One task at a time.** Move it to `In Progress` in `TASKS.md`, implement
-   it, test it, and report.
+1. **One task at a time, one checkpoint per task.** Move it to
+   `In Progress` in `TASKS.md`, implement it, test it, give the checkpoint
+   report ([guardrails.md](guardrails.md) §9), and stop. Suggested order,
+   one checkpoint each: `agents.py` -> `model.py` -> `metrics.py` ->
+   `experiments.py` + config -> tests. Never generate the whole project in
+   one turn.
 2. **ODD annotations.** Every class and behavioral method has a docstring
    starting with its ODD reference. Non-obvious lines carry an inline
    `# ODD x.y` comment. See [guardrails.md](guardrails.md) §4.
