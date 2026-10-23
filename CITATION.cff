@@ -6,8 +6,8 @@ authors:
 version: 1.0.0
 date-released: 2026-10-22
 license: MIT
-repository-code: "https://github.com/Unevem/ABM-skills"
-url: "https://github.com/Unevem/ABM-skills"
+repository-code: "https://github.com/Unevem/ABMforAI"
+url: "https://github.com/Unevem/ABMforAI"
 keywords:
   - "agent-based-modeling"
   - "computational-social-science"

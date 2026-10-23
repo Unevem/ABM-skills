@@ -50,7 +50,7 @@ Diagnostic Interview     ODD Protocol &         Modular Python/Mesa    Invariant
 ## Repository Architecture
 
 ```text
-ABM-skills/
+ABMforAI/
 ├── README.md                          # Project presentation and usage guide
 ├── LICENSE                            # MIT License
 ├── CITATION.cff                       # Formal academic citation metadata
@@ -147,17 +147,17 @@ python tools/scaffold_abm.py sugarscape-model --output-dir models/
 ### 1. Installation
 
 > [!NOTE]
-> The `abmforai` npm package release is currently pending publication. You can install directly from GitHub using `npx github:Unevem/ABM-skills setup` or `npx skills add Unevem/ABM-skills`. Once published to npm, `npx abmforai setup` will become the primary shortcut.
+> The `abmforai` npm package release is currently pending publication. You can install directly from GitHub using `npx github:Unevem/ABMforAI setup` or `npx skills add Unevem/ABMforAI`. Once published to npm, `npx abmforai setup` will become the primary shortcut.
 
 #### Option A: Direct via GitHub npx (Recommended, no clone required)
 Inside your simulation project directory, run:
 ```bash
-npx github:Unevem/ABM-skills setup
+npx github:Unevem/ABMforAI setup
 ```
 
 #### Option B: Via Skills CLI (Universal skills package manager)
 ```bash
-npx skills add Unevem/ABM-skills
+npx skills add Unevem/ABMforAI
 ```
 
 #### Option C: Once published to the npm Registry
@@ -227,7 +227,7 @@ This framework and its accompanying empirical study are designed for academic co
   author = {ABMforAI Contributors},
   year = {2026},
   version = {1.0.0},
-  url = {https://github.com/Unevem/ABM-skills}
+  url = {https://github.com/Unevem/ABMforAI}
 }
 ```
 
